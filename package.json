@@ -1,0 +1,13 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && npm --prefix client install && npm --prefix server install",
+    "dev": "concurrently -n client,server -c magenta,cyan \"npm --prefix client run dev\" \"npm --prefix server run dev\"",
+    "build": "npm --prefix client run build",
+    "start": "concurrently -n client,server \"npm --prefix client run start\" \"npm --prefix server run start\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.next/
+out/
+.vercel
+*.log
+.DS_Store
+# Local-only folders
+image-originals/
+.claude/

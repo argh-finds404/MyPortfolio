@@ -1,0 +1,35 @@
+# Render Blueprint: deploys the Express API in /server.
+# Render dashboard → New → Blueprint → pick this repo. You'll be asked for the
+# values marked `sync: false`.
+services:
+  - type: web
+    name: shoumik-portfolio-api
+    runtime: node
+    region: singapore
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.17.0
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_ORIGIN # e.g. https://shoumik.vercel.app,https://shoumik-*.vercel.app
+        sync: false
+      - key: MONGODB_URI # MongoDB Atlas connection string
+        sync: false
+      - key: ADMIN_KEY # random secret for /api/messages
+        generateValue: true
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "465"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: NOTIFY_EMAIL
+        sync: false

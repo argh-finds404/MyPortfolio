@@ -1,0 +1,336 @@
+@import "tailwindcss";
+
+/* ── Design tokens ─────────────────────────────────────────
+   Change the palette here and the whole site follows.        */
+:root {
+  --ink: #050506;
+  --surface: #0d0d10;
+  --raise: #15151a;
+  --line: rgb(255 255 255 / 0.09);
+  --paper: #f2f1ee;
+  --mute: #8c8c96;
+  --accent: #4da8ff;
+  --accent-ink: #021026;
+  /* Neon glow (text-shadow) used for hover highlights and the banner badge */
+  --neon-text: 0 0 6px rgb(77 168 255 / 0.9), 0 0 18px rgb(77 168 255 / 0.6), 0 0 42px rgb(77 168 255 / 0.35);
+  --neon-box: 0 0 0 1px rgb(77 168 255 / 0.55), 0 0 14px rgb(77 168 255 / 0.45), inset 0 0 10px rgb(77 168 255 / 0.18);
+  --grid-faint: rgb(255 255 255 / 0.035);
+  --grid-glow: rgb(77 168 255 / 0.6);
+  --glow-soft: rgb(77 168 255 / 0.25);
+  --glow-strong: rgb(77 168 255 / 0.5);
+  --good: #a6f0c0;
+  --bad: #ffb3b3;
+  --grain: 0.05;
+  color-scheme: dark;
+}
+
+/* Light theme: same tokens, inverted. Every component reads these. */
+:root[data-theme="light"] {
+  --ink: #f7f7f8;
+  --surface: #eeeef1;
+  --raise: #ffffff;
+  --line: rgb(10 10 20 / 0.1);
+  --paper: #0c0c10;
+  --mute: #63636e;
+  --accent: #0a5cff;
+  --accent-ink: #ffffff;
+  --neon-text: 0 0 1px rgb(10 92 255 / 0.35), 0 0 16px rgb(10 92 255 / 0.28);
+  --neon-box: 0 0 0 1px rgb(10 92 255 / 0.45), 0 0 14px rgb(10 92 255 / 0.22), inset 0 0 8px rgb(10 92 255 / 0.08);
+  --grid-faint: rgb(10 10 20 / 0.04);
+  --grid-glow: rgb(10 92 255 / 0.45);
+  --glow-soft: rgb(10 92 255 / 0.14);
+  --glow-strong: rgb(10 92 255 / 0.32);
+  --good: #11804a;
+  --bad: #c0362c;
+  --grain: 0.035;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-raise: var(--raise);
+  --color-line: var(--line);
+  --color-paper: var(--paper);
+  --color-mute: var(--mute);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-good: var(--good);
+  --color-bad: var(--bad);
+  --font-display: var(--font-clash), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-dm), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-jet), ui-monospace, monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  background: var(--ink);
+}
+
+/* Theme switch: the new theme is revealed by a growing circle (see lib/theme.ts) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* ── Utilities ─────────────────────────────────────────── */
+@utility container-x {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 1440px;
+  padding-inline: clamp(1rem, 4vw, 3.5rem);
+}
+
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+/* Hairline grid used behind the hero */
+.grid-lines {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 96px 96px;
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 75%);
+}
+
+/* Film grain overlay (static: an animated full-screen layer costs frames) */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Marquee */
+.marquee-track {
+  animation: marquee var(--marquee-speed, 38s) linear infinite;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Contact orbit */
+.orbit-ring {
+  animation: orbit var(--orbit-speed, 26s) linear infinite;
+}
+.orbit-ring > * {
+  animation: orbit var(--orbit-speed, 26s) linear infinite reverse;
+}
+.orbit:hover .orbit-ring,
+.orbit:hover .orbit-ring > * {
+  animation-play-state: paused;
+}
+@keyframes orbit {
+  to { transform: rotate(360deg); }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-out infinite;
+}
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgb(127 224 160 / 0.6); }
+  100% { box-shadow: 0 0 0 10px rgb(127 224 160 / 0); }
+}
+
+/* Split-text line masks */
+/* Room below each line for descenders (g, y, p) so the reveal mask never cuts them */
+.split-line,
+.split-line-mask {
+  overflow: clip;
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes scrollcue {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(300%); }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Slow scan line sweeping down the hero grid */
+@keyframes scan {
+  from { transform: translateY(-10vh); }
+  to { transform: translateY(110vh); }
+}
+.scan-beam {
+  animation: scan 7s linear infinite;
+}
+
+/* Gentle bob for the floating tech logos */
+@keyframes bob {
+  50% { transform: translateY(-10px); }
+}
+.bob {
+  animation: bob var(--bob, 5s) ease-in-out infinite;
+}
+
+/* Neon badge: breathing glow, brighter on hover */
+.neon-pill {
+  box-shadow: var(--neon-box);
+  animation: neon-breathe 3.2s ease-in-out infinite;
+}
+.neon-pill:hover {
+  animation-play-state: paused;
+  box-shadow: var(--neon-box), 0 0 28px var(--glow-strong);
+}
+.neon-pill:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes neon-breathe {
+  50% { box-shadow: 0 0 0 1px var(--glow-strong), 0 0 6px var(--glow-soft); }
+}
+.neon-text {
+  color: var(--accent);
+  text-shadow: var(--neon-text);
+}
+
+/* About statement: each word lights up in neon blue under the cursor, then fades back slowly */
+.about-word {
+  transition: color 1.2s ease, text-shadow 1.2s ease;
+}
+.about-word:hover {
+  color: var(--accent);
+  text-shadow: var(--neon-text);
+  transition-duration: 0.08s;
+}
+
+/* Footer graph paper: faint grid everywhere, a bright patch follows the cursor */
+.footer-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px),
+    linear-gradient(to right, var(--grid-faint) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-faint) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+}
+.footer-grid-glow {
+  background-image:
+    linear-gradient(to right, var(--grid-glow) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-glow) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), #000 0%, transparent 70%);
+  mask-image: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), #000 0%, transparent 70%);
+}
+
+/* ── Process step icons ───────────────────────────────────
+   Strokes draw in when the step becomes active, then loop gently. */
+.process-step.is-active .step-icon {
+  color: var(--accent);
+  border-color: var(--grid-glow);
+  background-color: var(--glow-soft);
+  box-shadow: 0 0 22px var(--glow-soft);
+}
+.pi-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.process-step.is-active .pi-draw {
+  stroke-dashoffset: 0;
+}
+.pi-scan,
+.pi-launch,
+.pi-left,
+.pi-right {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.process-step.is-active .pi-scan { animation: pi-scan 3.2s ease-in-out 0.9s infinite; }
+.process-step.is-active .pi-write { animation: pi-write 2.8s ease-in-out 1s infinite; }
+.process-step.is-active .pi-left { animation: pi-left 2.4s ease-in-out 0.9s infinite; }
+.process-step.is-active .pi-right { animation: pi-right 2.4s ease-in-out 0.9s infinite; }
+.process-step.is-active .pi-blink { animation: pi-blink 1.2s steps(1) 0.9s infinite; }
+.process-step.is-active .pi-recheck { animation: pi-recheck 2.6s ease-in-out 1s infinite; }
+.process-step.is-active .pi-launch { animation: pi-launch 2.2s cubic-bezier(0.45, 0, 0.2, 1) 0.9s infinite; }
+.pi-spark { opacity: 0; }
+.process-step.is-active .pi-spark { animation: pi-spark 2.2s ease-out 0.9s infinite; }
+
+@keyframes pi-scan {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(1.5px, -1.5px); }
+  50% { transform: translate(-1px, -2px); }
+  75% { transform: translate(-1.5px, 1px); }
+}
+@keyframes pi-write {
+  0% { stroke-dashoffset: 1; }
+  35%, 80% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 1; }
+}
+@keyframes pi-left { 50% { transform: translateX(-1.5px); } }
+@keyframes pi-right { 50% { transform: translateX(1.5px); } }
+@keyframes pi-blink { 50% { opacity: 0.15; } }
+@keyframes pi-recheck {
+  0%, 15% { stroke-dashoffset: 1; }
+  45%, 85% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 1; }
+}
+@keyframes pi-launch {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-2.5px); }
+  60% { transform: translateY(-1.5px); }
+}
+@keyframes pi-spark {
+  0% { opacity: 0; transform: translateY(0); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pi-draw { stroke-dashoffset: 0; }
+}
