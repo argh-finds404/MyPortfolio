@@ -60,7 +60,8 @@ export default function Work() {
 
   return (
     <section id="work" ref={root} className="relative">
-      <div className="work-pin flex flex-col justify-center overflow-hidden py-28 lg:h-dvh lg:py-0">
+      {/* pt clears the fixed navbar; cards are sized by height too so short laptop screens never clip the heading */}
+      <div className="work-pin flex flex-col justify-center overflow-hidden py-28 lg:h-dvh lg:pt-20 lg:pb-6">
         <div className="container-x mb-12 flex flex-wrap items-end justify-between gap-6 lg:mb-14">
           <RevealText className="display text-[clamp(2.75rem,7vw,6.5rem)]">{site.sections.work.title}</RevealText>
           <p className="max-w-sm text-paper/70">{site.sections.work.intro}</p>
@@ -68,7 +69,7 @@ export default function Work() {
 
         <div ref={track} className="flex flex-col gap-14 px-[clamp(1rem,4vw,3.5rem)] lg:w-max lg:flex-row lg:gap-8">
           {site.projects.map((p, i) => (
-            <article key={p.slug} className="work-card lg:w-[min(46vw,720px)]">
+            <article key={p.slug} className="work-card lg:w-[min(46vw,720px,calc((100dvh-28rem)*1.6))]">
             <Link href={`/projects/${p.slug}`} data-cursor="View" className="group block">
               <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-raise">
                 <Image
