@@ -64,8 +64,8 @@ export const site = {
       "/images/projects/hero-io-1.jpg",
       "/images/projects/toytopia-1.jpg",
       "/images/projects/joruri-seba-1.jpg",
-      "/images/projects/green-earth-1.jpg",
-      "/images/projects/civicnest-2.jpg",
+      "/images/projects/theia-1.jpg",
+      "/images/projects/gitprism-1.jpg",
     ],
   },
 
@@ -265,25 +265,54 @@ export const site = {
       gallery: ["/images/projects/joruri-seba-1.jpg", "/images/projects/joruri-seba-2.jpg"],
     },
     {
-      slug: "green-earth",
-      title: "Green Earth",
-      category: "Tree store & donations",
+      slug: "theia",
+      title: "THEIA",
+      category: "3D scroll-driven lunar journey",
       year: "2026",
-      role: "Frontend developer",
-      cover: "/images/projects/green-earth-1.jpg",
-      summary: "A tree plantation store with live data from an API, category filters, a cart and a donation form.",
-      stack: ["HTML", "Tailwind CSS", "DaisyUI", "JavaScript"],
-      live: "https://tree-selling-store-06.netlify.app/",
-      repo: `${GITHUB}/green-earth-tree-store`,
+      role: "Frontend & WebGL developer",
+      cover: "/images/projects/theia-1.jpg",
+      summary:
+        "A scroll-driven journey from the launch pad to the Moon, built from real astronomy, NASA terrain data and hand-written WebGL2 shaders.",
+      stack: ["React", "TypeScript", "WebGL2", "Three.js", "Tailwind CSS", "Lenis", "Vite"],
+      live: "https://theia-moon-landing-page.vercel.app/",
+      repo: `${GITHUB}/THEIA-Moon-Landing-Page`,
       metrics: [
-        { value: "Live API", label: "Real tree data" },
-        { value: "Cart", label: "With a running total" },
-        { value: "0", label: "Frameworks or build tools" },
+        { value: "WebGL2", label: "Custom shaders & NASA 4K maps" },
+        { value: "1.25s", label: "Real light-speed signal delay" },
+        { value: "60fps", label: "Single-loop scroll timeline" },
       ],
-      problem: "An environmental campaign needed a simple way for people to buy or donate trees.",
-      solution: "Fetches tree data from a live API, with category filtering, a detail modal, a cart and a donation form.",
-      outcome: "Taught me async JavaScript and loading states properly, without a framework to lean on.",
-      gallery: ["/images/projects/green-earth-1.jpg"],
+      problem:
+        "Most space concept sites rely on static renders and made-up numbers. The goal was to make a scroll-driven trip from Earth to the Moon where every phase, distance and delay is calculated from real astronomy.",
+      solution:
+        "A 10-chapter scroll journey powered by a single animation loop, Lenis smooth scrolling and custom WebGL2 shaders. It works out today's real Moon phase, orbital distance and ~1.25s radio transit time in the browser, pins historic landings on a 3D lunar globe built from NASA LRO laser altimetry, and decodes 4K textures off-thread so scrolling stays smooth.",
+      outcome:
+        "Deployed on Vercel with full keyboard navigation and reduced-motion fallbacks. Driving the whole page from scroll position without an animation library taught me how to separate DOM reads from style writes to keep 60fps under WebGL load.",
+      gallery: ["/images/projects/theia-1.jpg", "/images/projects/theia-2.jpg"],
+    },
+    {
+      slug: "gitprism",
+      title: "GitPrism",
+      category: "Local-first Git & AST visual studio",
+      year: "2026",
+      role: "Full-stack developer",
+      cover: "/images/projects/gitprism-1.jpg",
+      summary:
+        "A local-first developer platform that refracts raw Git objects, branch histories and TypeScript ASTs into interactive 3D lenses, blast-radius maps and a 3-way merge lab.",
+      stack: ["Next.js", "TypeScript", "Three.js", "Tailwind CSS", "Prisma", "PostgreSQL", "Vitest"],
+      live: "https://gitprism-visual-tool.vercel.app/",
+      repo: `${GITHUB}/GitPrism-Visual-Tool`,
+      metrics: [
+        { value: "100%", label: "In-browser Git object parsing" },
+        { value: "194", label: "Vitest tests for Git parity" },
+        { value: "7", label: "Interactive visual studios" },
+      ],
+      problem:
+        "Developers use Git every day, yet it often feels like a black box of terminal commands—and traditional diff viewers show changed lines without revealing which downstream modules or tests are impacted.",
+      solution:
+        "A local-first Next.js 16 and TypeScript platform that decompresses raw .git loose objects in the browser via Web Streams, routes multi-lane SVG commit DAGs, and parses TypeScript ASTs to map architectural blast radiuses. It includes an in-memory Git sandbox, a 3D PR Impact Studio, a 3-way MergeLab with Web Worker test runs, and optional 7-day cloud share links with Prisma and PostgreSQL.",
+      outcome:
+        "Backed by a 194-test Vitest suite asserting byte-for-byte SHA-1 parity with the real Git CLI, while keeping repository analysis 100% private inside the browser by default.",
+      gallery: ["/images/projects/gitprism-1.jpg", "/images/projects/gitprism-2.jpg"],
     },
   ],
 

@@ -4,6 +4,10 @@
 let done = false;
 const listeners = new Set<() => void>();
 
+export function isIntroDone() {
+  return done;
+}
+
 export function finishIntro() {
   done = true;
   listeners.forEach((fn) => fn());
